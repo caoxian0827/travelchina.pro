@@ -1,6 +1,5 @@
 backend:
-  name: github
-  repo: 您的GitHub用户名/travelchina.pro
+  name: git-gateway
   branch: main
 
 media_folder: "images/uploads"
