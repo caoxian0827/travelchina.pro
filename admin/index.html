@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>探索中国 | 内容管理系统</title>
   <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <!-- Netlify Identity Widget -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -82,12 +84,26 @@
       border-top: 1px solid #eee;
     }
     
+    .login-button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    
+    .login-button:hover {
+      background-color: #2980b9;
+    }
+    
     #nc-root {
       width: 100%;
       min-height: 500px;
     }
     
-    /* CMS界面加载后会覆盖这些元素 */
     .cms-loading-hide {
       display: none;
     }
@@ -101,9 +117,10 @@
   <main class="login-container">
     <!-- 加载界面 -->
     <div class="loading-screen" id="loading-screen">
-      <h2>正在加载内容管理系统</h2>
-      <div class="loading-icon"></div>
-      <p>请稍候，系统正在连接到您的内容仓库...</p>
+      <h2>内容管理系统</h2>
+      <p>欢迎使用探索中国网站的内容管理系统</p>
+      <button class="login-button" id="login-button">登录管理系统</button>
+      <div class="loading-icon" style="display:none;" id="loading-icon"></div>
     </div>
     
     <!-- CMS将挂载到这个元素 -->
@@ -111,22 +128,36 @@
   </main>
   
   <footer class="footer">
-    <p>&copy; 2024 探索中国 | 内容管理系统 - 由Decap CMS提供支持</p>
+    <p>&copy; 2024 探索中国 | 内容管理系统 - 由Netlify CMS提供支持</p>
   </footer>
 
-  <!-- CMS加载完成后隐藏加载界面 -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // 监听CMS加载事件
-      window.addEventListener('load', function() {
-        setTimeout(function() {
-          document.getElementById('loading-screen').classList.add('cms-loading-hide');
-        }, 1000);
-      });
+    // 处理登录按钮点击
+    document.getElementById('login-button').addEventListener('click', function() {
+      document.getElementById('login-button').style.display = 'none';
+      document.getElementById('loading-icon').style.display = 'block';
+      netlifyIdentity.open();
     });
+    
+    // Netlify Identity事件监听
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          // 用户未登录
+          console.log("未登录");
+        } else {
+          // 用户已登录，隐藏加载界面
+          document.getElementById('loading-screen').classList.add('cms-loading-hide');
+        }
+      });
+      
+      window.netlifyIdentity.on("login", () => {
+        document.getElementById('loading-screen').classList.add('cms-loading-hide');
+      });
+    }
   </script>
   
-  <!-- Decap CMS -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <!-- Netlify CMS -->
+  <script src="https://unpkg.com/netlify-cms@^2.10.192/dist/netlify-cms.js"></script>
 </body>
 </html>
