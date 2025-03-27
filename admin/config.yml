@@ -2,16 +2,6 @@ backend:
   name: github
   repo: caoxian0827/travelchina.pro
   branch: main
-
-media_folder: "images/uploads"
-public_folder: "/images/uploads"
-
-collections:
-  - name: "pages"
-    label: "页面"
-    files:
-      - name: "home"
-        label: "首页"
-        file: "index.html"
-        fields:
-          - {label: "标题", name: "title", widget: "string"}
+  auth_endpoint: auth
+  base_url: https://api.netlify.com
+  client_id: Ov23liP04YaEZgZsalnF
