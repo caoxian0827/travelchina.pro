@@ -1,34 +1,17 @@
-   backend:
-     name: github
-     repo: caoxian0827/travelchina.pro
-     branch: main  # 确认这是您的主分支名称
-     auth_type: implicit  # 使用GitHub OAuth进行简单登录
-     app_id: 99309d92dcd23c83305a  # 通用GitHub OAuth应用ID
+backend:
+  name: github
+  repo: caoxian0827/travelchina.pro
+  branch: main
 
-   # 发布模式（可选）
-   publish_mode: editorial_workflow
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
 
-   # 媒体文件存储位置
-   media_folder: "images/uploads"
-   public_folder: "/images/uploads"
-
-   # 内容集合定义
-   collections:
-     - name: "pages"
-       label: "页面"
-       folder: "/"
-       create: true
-       extension: "html"
-       fields:
-         - {label: "标题", name: "title", widget: "string"}
-         - {label: "正文", name: "body", widget: "markdown"}
-
-     - name: "destinations"
-       label: "目的地"
-       folder: "destinations"
-       create: true
-       extension: "html"
-       fields:
-         - {label: "目的地名称", name: "title", widget: "string"}
-         - {label: "描述", name: "description", widget: "text"}
-         - {label: "内容", name: "body", widget: "markdown"}
+collections:
+  - name: "pages"
+    label: "页面"
+    files:
+      - name: "home"
+        label: "首页"
+        file: "index.html"
+        fields:
+          - {label: "标题", name: "title", widget: "string"}
