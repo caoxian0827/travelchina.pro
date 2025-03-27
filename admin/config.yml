@@ -1,0 +1,35 @@
+backend:
+  name: github
+  repo: 您的GitHub用户名/travelchina.pro
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "pages"
+    label: "页面"
+    files:
+      - name: "beijing"
+        label: "北京页面"
+        file: "beijing.html"
+        fields:
+          - {label: "标题", name: "title", widget: "string"}
+          - {label: "描述", name: "description", widget: "string"}
+          - {label: "页面内容", name: "body", widget: "markdown"}
+          
+      - name: "great-wall"
+        label: "长城指南"
+        file: "great-wall-guide.html"
+        fields:
+          - {label: "标题", name: "title", widget: "string"}
+          - {label: "描述", name: "description", widget: "string"}
+          - {label: "页面内容", name: "body", widget: "markdown"}
+          
+      - name: "photography"
+        label: "摄影页面"
+        file: "photography.html"
+        fields:
+          - {label: "标题", name: "title", widget: "string"}
+          - {label: "描述", name: "description", widget: "string"}
+          - {label: "页面内容", name: "body", widget: "markdown"}
