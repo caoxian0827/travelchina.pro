@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photography | Discover China</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            color: #333;
+            line-height: 1.6;
+            background-color: #fff;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* 导航栏 */
+        header {
+            position: fixed;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #e74c3c;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #e74c3c;
+        }
+        
+        .nav-links a.active {
+            color: #e74c3c;
+            border-bottom: 2px solid #e74c3c;
+        }
+        
+        /* 页面标题 */
+        .page-header {
+            height: 60vh;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1506157786151-b8491531f063?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            margin-bottom: 60px;
+        }
+        
+        .page-header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .page-header p {
+            font-size: 18px;
+            max-width: 700px;
+            margin-bottom: 30px;
+        }
+        
+        /* 相册过滤器 */
+        .filter-container {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .filter-buttons {
+            display: inline-flex;
+            background-color: #f5f5f5;
+            border-radius: 30px;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-button {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #555;
+            transition: all 0.3s;
+        }
+        
+        .filter-button.active {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        /* 特色摄影 */
+        .featured-photo {
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .featured-image {
+            height: 70vh;
+            background-image: url('https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            position: relative;
+        }
+        
+        .featured-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 40px;
+            color: white;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        
+        .featured-info h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+        
+        .featured-info p {
+            font-size: 16px;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+        
+        .featured-meta {
+            display: flex;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .featured-meta span {
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .featured-meta i {
+            margin-right: 5px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #c0392b;
+        }
+        
+        /* 摄影集 */
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 32px;
+            font-weight: 600;
+        }
+        
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+        
+        .photo-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .photo-item:hover {
+            transform: translateY(-10px);
+        }
+        
+        .photo-item:nth-child(3n+1) {
+            grid-row: span 2;
+        }
+        
+        .photo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .photo-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 20px;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .photo-item:hover .photo-info {
+            opacity: 1;
+        }
+        
+        .photo-info h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .photo-info p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        /* 摄影师简介 */
+        .photographers {
+            background-color: #f9f9f9;
+            padding: 60px 0;
+            margin-bottom: 60px;
+        }
+        
+        .photographer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .photographer-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        .photographer-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 40px auto 20px;
+            overflow: hidden;
+        }
+        
+        .photographer-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .photographer-info {
+            padding: 0 20px 40px;
+        }
+        
+        .photographer-info h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .photographer-info p {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 20px;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            text-decoration: none;
+            color: #555;
+            transition: all 0.3s;
+        }
+        
+        .social-link:hover {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        /* 摄影技巧 */
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .tip-card {
+            display: flex;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .tip-img {
+            flex: 0 0 40%;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .tip-content {
+            flex: 0 0 60%;
+            padding: 25px;
+        }
+        
+        .tip-content h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .tip-content p {
+            margin-bottom: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        /* 分享您的照片 */
+        .share-photos {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .share-box {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .share-box h2 {
+            margin-bottom: 20px;
+        }
+        
+        .share-box p {
+            margin-bottom: 30px;
+            color: #666;
+        }
+        
+        /* 页脚 */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #e74c3c;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #e74c3c;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 900px) {
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .photographer-grid, .tips-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header h1 {
+                font-size: 36px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .photo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .photo-item:nth-child(3n+1) {
+                grid-row: span 1;
+            }
+            
+            .page-header h1 {
+                font-size: 28px;
+            }
+            
+            .featured-info {
+                padding: 20px;
+            }
+            
+            .featured-info h2 {
+                font-size: 24px;
+            }
+            
+            .featured-meta {
+                flex-direction: column;
+            }
+            
+            .featured-meta span {
+                margin-bottom: 5px;
+            }
+            
+            .tip-card {
+                flex-direction: column;
+            }
+            
+            .tip-img {
+                height: 200px;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .filter-buttons {
+                display: flex;
+                flex-direction: column;
+                background: none;
+                padding: 0;
+            }
+            
+            .filter-button {
+                margin-bottom: 10px;
+                background-color: #f5f5f5;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Discover China</div>
+                <ul class="nav-links">
+                    <li><a href="destinations.html">Destinations</a></li>
+                    <li><a href="guides.html">Guides</a></li>
+                    <li><a href="photography.html" class="active">Photography</a></li>
+                    <li><a href="culture.html">Culture</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 页面标题 -->
+    <section class="page-header">
+        <h1>China Through the Lens</h1>
+        <p>Discover the stunning beauty and rich culture of China through captivating photography</p>
+    </section>
+
+    <div class="container">
+        <!-- 相册过滤器 -->
+        <div class="filter-container">
+            <div class="filter-buttons">
+                <button class="filter-button active">All Photos</button>
+                <button class="filter-button">Landscapes</button>
+                <button class="filter-button">Architecture</button>
+                <button class="filter-button">People</button>
+                <button class="filter-button">Food</button>
+                <button class="filter-button">Nature</button>
+            </div>
+        </div>
+        
+        <!-- 特色摄影 -->
+        <section class="featured-photo">
+            <div class="featured-image"></div>
+            <div class="featured-info">
+                <h2>Li River Karst Mountains at Dawn</h2>
+                <p>A fisherman navigates the serene Li River as morning mist curls around the dramatic karst formations near Yangshuo. This iconic landscape represents the quintessential image of rural southern China.</p>
+                <div class="featured-meta">
+                    <span><i>📷</i> Nikon Z7, 24-70mm f/2.8</span>
+                    <span><i>🗺️</i> Yangshuo, Guangxi Province</span>
+                    <span><i>👤</i> Photo by Li Wei</span>
+                </div>
+                <a href="zhangjiajie-photography.html" class="btn" style="margin-top: 20px;">View Photography Guide</a>
+            </div>
+        </section>
+        
+        <!-- 摄影集 -->
+        <section>
+            <h2 class="section-title">Photo Gallery</h2>
+            <div class="photo-grid">
+                <div class="photo-item">
+                    <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Zhangjiajie" class="photo-img">
+                    <div class="photo-info">
+                        <h3>Zhangjiajie's Ethereal Pillars</h3>
+                        <p>Misty mountains in Hunan Province that inspired Avatar's floating mountains</p>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="https://images.unsplash.com/photo-1577706754828-effbafc8c2b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Beijing Temple" class="photo-img">
+                    <div class="photo-info">
+                        <h3>Temple of Heaven</h3>
+                        <p>Ancient imperial complex in Beijing bathed in winter light</p>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="https://images.unsplash.com/photo-1513977055326-8ae6272d90a7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Li River" class="photo-img">
+                    <div class="photo-info">
+                        <h3>Li River Serenity</h3>
+                        <p>Cormorant fisherman showcasing traditional fishing techniques at dawn</p>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="https://images.unsplash.com/photo-1527909740943-0069c4f94e16?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Chinese Food" class="photo-img">
+                    <div class="photo-info">
+                        <h3>Sichuan Hot Pot</h3>
+                        <p>Vibrant and spicy culinary tradition from southwestern China</p>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="https://images.unsplash.com/photo-1567293546476-7a3c36b1d2fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Great Wall" class="photo-img">
+                    <div class="photo-info">
+                        <h3>Great Wall Majesty</h3>
+                        <p>The ancient defensive structure winds through autumn-colored mountains</p>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="https://images.unsplash.com/photo-1576675222977-3b355643eb38?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Shanghai" class="photo-img">
+                    <div class="photo-info">
+                        <h3>Shanghai Skyline</h3>
+                        <p>The futuristic Pudong district illuminated at dusk</p>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="https://images.unsplash.com/photo-1578950435898-527aa743eefe?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Summer Palace" class="photo-img">
+                    <div class="photo-info">
+                        <h3>Summer Palace Serenity</h3>
+                        <p>Historic imperial retreat in Beijing reflecting in Kunming Lake</p>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="https://images.unsplash.com/photo-1574781481744-c575fbf275af?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Terracotta Warriors" class="photo-img">
+                    <div class="photo-info">
+                        <h3>Terracotta Warriors</h3>
+                        <p>Ancient clay soldiers standing guard in Emperor Qin's tomb</p>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="https://images.unsplash.com/photo-1510011560141-62c7e8fc7908?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Tibetan Prayer Flags" class="photo-img">
+                    <div class="photo-info">
+                        <h3>Tibetan Prayer Flags</h3>
+                        <p>Colorful flags sending prayers into the wind in the Himalayas</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- 摄影师简介 -->
+    <section class="photographers">
+        <div class="container">
+            <h2 class="section-title">Featured Photographers</h2>
+            <div class="photographer-grid">
+                <div class="photographer-card">
+                    <div class="photographer-img">
+                        <img src="https://images.unsplash.com/photo-1557862921-37829c790f19?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Li Wei">
+                    </div>
+                    <div class="photographer-info">
+                        <h3>Li Wei</h3>
+                        <p>Landscape photographer specializing in China's remote natural wonders, with over 15 years capturing the country's diverse terrain.</p>
+                        <div class="social-links">
+                            <a href="#" class="social-link">IG</a>
+                            <a href="#" class="social-link">FB</a>
+                            <a href="#" class="social-link">TW</a>
+                        </div>
+                        <a href="#" class="btn">View Portfolio</a>
+                    </div>
+                </div>
+                <div class="photographer-card">
+                    <div class="photographer-img">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Zhang Min">
+                    </div>
+                    <div class="photographer-info">
+                        <h3>Zhang Min</h3>
+                        <p>Documentary photographer focused on China's ethnic minorities and traditional ways of life in rapidly changing communities.</p>
+                        <div class="social-links">
+                            <a href="#" class="social-link">IG</a>
+                            <a href="#" class="social-link">FB</a>
+                            <a href="#" class="social-link">TW</a>
+                        </div>
+                        <a href="#" class="btn">View Portfolio</a>
+                    </div>
+                </div>
+                <div class="photographer-card">
+                    <div class="photographer-img">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Wang Jie">
+                    </div>
+                    <div class="photographer-info">
+                        <h3>Wang Jie</h3>
+                        <p>Urban photographer capturing the contrast between ancient and modern China in major cities, with a focus on architectural transformation.</p>
+                        <div class="social-links">
+                            <a href="#" class="social-link">IG</a>
+                            <a href="#" class="social-link">FB</a>
+                            <a href="#" class="social-link">TW</a>
+                        </div>
+                        <a href="#" class="btn">View Portfolio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="container">
+        <!-- 摄影技巧 -->
+        <section>
+            <h2 class="section-title">Photography Tips</h2>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-img" style="background-image: url('https://images.unsplash.com/photo-1506157786151-b8491531f063?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="tip-content">
+                        <h3>Capturing Misty Mountains</h3>
+                        <p>The karst mountains and mist-filled valleys of places like Zhangjiajie and Guilin are iconic China landscapes. To capture them at their best:</p>
+                        <ul style="margin-left: 20px; margin-bottom: 15px;">
+                            <li>Shoot during early morning (5-8 AM) when mist is most prevalent</li>
+                            <li>Use a polarizing filter to cut through haze and enhance colors</li>
+                            <li>Consider a telephoto lens to compress layers of mountains</li>
+                            <li>Include scale elements like boats or trees to show the grandeur</li>
+                        </ul>
+                        <a href="zhangjiajie-photography.html" class="btn">Read Full Guide</a>
+                    </div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-img" style="background-image: url('https://images.unsplash.com/photo-1576675222977-3b355643eb38?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="tip-content">
+                        <h3>Urban Photography in China</h3>
+                        <p>China's cities offer a fascinating blend of ancient traditions and futuristic architecture. Here's how to capture this contrast:</p>
+                        <ul style="margin-left: 20px; margin-bottom: 15px;">
+                            <li>Shoot during the "blue hour" just after sunset for balanced lighting</li>
+                            <li>Look for juxtaposition of old and new elements</li>
+                            <li>Use wide-angle lenses to capture towering skyscrapers</li>
+                            <li>Explore alleyways and side streets for authentic city life</li>
+                        </ul>
+                        <a href="urban-china-photography.html" class="btn">Read Full Guide</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 分享您的照片 -->
+        <section class="share-photos">
+            <div class="share-box">
+                <h2>Share Your China Photos</h2>
+                <p>Have you captured amazing moments in China? Share your photos with our community and get a chance to be featured in our gallery and social media channels.</p>
+                <a href="#" class="btn">Submit Your Photos</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Discover China</h3>
+                    <p>Your insider guide to authentic Chinese travel experiences, stunning photography, and cultural insights.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Destinations</h3>
+                    <ul class="footer-links">
+                        <li><a href="beijing.html">Beijing</a></li>
+                        <li><a href="shanghai.html">Shanghai</a></li>
+                        <li><a href="xian.html">Xi'an</a></li>
+                        <li><a href="guilin.html">Guilin</a></li>
+                        <li><a href="chengdu.html">Chengdu</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Travel Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Photography Tips</a></li>
+                        <li><a href="#">Visa Information</a></li>
+                        <li><a href="#">Transportation Guide</a></li>
+                        <li><a href="#">Accommodation</a></li>
+                        <li><a href="#">Packing Lists</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Connect</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Use</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 Discover China. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 

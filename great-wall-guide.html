@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ultimate Great Wall Experience | Discover China</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            color: #333;
+            line-height: 1.6;
+            background-color: #fff;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* 导航栏 */
+        header {
+            position: fixed;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #e74c3c;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            color: #e74c3c;
+        }
+        
+        /* 攻略头部 */
+        .guide-hero {
+            height: 70vh;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1567293546476-7a3c36b1d2fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 40px;
+        }
+        
+        .guide-hero-content {
+            color: white;
+            padding-bottom: 60px;
+        }
+        
+        .guide-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+        
+        .guide-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        
+        .guide-meta-item {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+        
+        .guide-intro {
+            font-size: 18px;
+            max-width: 700px;
+            margin-bottom: 30px;
+        }
+        
+        /* 内容布局 */
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        /* 主要内容样式 */
+        .main-content h2 {
+            font-size: 32px;
+            margin: 30px 0 15px;
+            color: #333;
+        }
+        
+        .main-content h3 {
+            font-size: 24px;
+            margin: 25px 0 15px;
+            color: #333;
+        }
+        
+        .main-content p {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #555;
+        }
+        
+        .main-content img {
+            width: 100%;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .main-content ul, .main-content ol {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+        
+        .main-content li {
+            margin-bottom: 10px;
+        }
+        
+        .highlight-box {
+            background-color: #f9f9f9;
+            border-left: 4px solid #e74c3c;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .highlight-box h4 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+        
+        .tab-container {
+            margin: 30px 0;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .tab-button {
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #555;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab-button.active {
+            color: #e74c3c;
+            border-bottom-color: #e74c3c;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* 侧边栏样式 */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+        }
+        
+        .sidebar-box {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .sidebar-box h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .toc-list {
+            list-style: none;
+        }
+        
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+        
+        .toc-list a {
+            color: #555;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .toc-list a:hover {
+            color: #e74c3c;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #c0392b;
+        }
+        
+        /* 作者信息 */
+        .author-box {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .author-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+        
+        .author-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .author-info h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .author-info p {
+            font-size: 14px;
+            color: #777;
+        }
+        
+        /* 图片库 */
+        .gallery-box img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+        
+        .gallery-box img:hover {
+            opacity: 0.8;
+        }
+        
+        /* 相关攻略 */
+        .related-guides {
+            padding: 60px 0;
+            background-color: #f9f9f9;
+            margin-bottom: 60px;
+        }
+        
+        .related-guides h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 40px;
+        }
+        
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .related-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .related-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .related-img {
+            height: 200px;
+        }
+        
+        .related-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .related-content {
+            padding: 20px;
+        }
+        
+        .related-content h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .related-content p {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 15px;
+        }
+        
+        /* 页脚 */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #e74c3c;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #e74c3c;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 900px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+            
+            .guide-title {
+                font-size: 36px;
+            }
+            
+            .related-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .guide-title {
+                font-size: 28px;
+            }
+            
+            .guide-meta {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .guide-meta-item {
+                margin-bottom: 10px;
+            }
+            
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .tab-buttons {
+                flex-direction: column;
+            }
+            
+            .tab-button {
+                width: 100%;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            
+            .tab-button.active {
+                border-bottom-color: #e74c3c;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Discover China</div>
+                <ul class="nav-links">
+                    <li><a href="destinations.html">Destinations</a></li>
+                    <li><a href="guides.html" class="active">Guides</a></li>
+                    <li><a href="photography.html">Photography</a></li>
+                    <li><a href="culture.html">Culture</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 攻略头部 -->
+    <section class="guide-hero">
+        <div class="container">
+            <div class="guide-hero-content">
+                <h1 class="guide-title">The Ultimate Great Wall Experience</h1>
+                <div class="guide-meta">
+                    <div class="guide-meta-item">
+                        <i>📅</i>&nbsp; 7 Days Itinerary
+                    </div>
+                    <div class="guide-meta-item">
+                        <i>🧳</i>&nbsp; Moderate Difficulty
+                    </div>
+                    <div class="guide-meta-item">
+                        <i>🗓️</i>&nbsp; Best Time: April-May, September-October
+                    </div>
+                </div>
+                <p class="guide-intro">Explore the less-visited sections of the Great Wall, away from the tourist crowds. This guide takes you through stunning landscapes and historic watchtowers that most travelers never see.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="content-wrapper">
+            <div class="main-content">
+                <p>The Great Wall of China stretches over 13,000 miles across northern China, winding through mountains, grasslands, and deserts. While millions of tourists flock to the heavily restored sections near Beijing like Badaling, this guide will take you to the less-crowded, more authentic parts of the Wall, where you can experience its true majesty without the crowds.</p>
+                
+                <h2 id="understanding">Understanding the Great Wall</h2>
+                <p>Contrary to popular belief, the Great Wall is not a single, continuous structure, but rather a series of walls built by various dynasties over two millennia. The majority of what we see today was built during the Ming Dynasty (1368-1644), though sections date back to the 7th century BCE.</p>
+                
+                <p>The Wall served not only as a physical barrier against invasions from the north but also as a symbol of China's endurance and engineering prowess. Different sections have their own unique characteristics, reflecting the terrain they traverse and the specific defensive needs they addressed.</p>
+                
+                <img src="https://images.unsplash.com/photo-1508804185872-d7badad00f7d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80" alt="Great Wall panoramic view">
+                
+                <h2 id="itinerary">7-Day Great Wall Itinerary</h2>
+                <p>This itinerary is designed to give you a comprehensive experience of different sections of the Great Wall, each with its own unique character and level of preservation. We've balanced well-known sections with lesser-known gems to provide a full spectrum of what the Wall has to offer.</p>
+                
+                <h3 id="day1">Day 1: Arrival in Beijing & Preparation</h3>
+                <p>Arrive in Beijing and settle into your accommodation. Use this day to acclimate to the time zone, gather supplies, and prepare for your Great Wall adventure. We recommend staying in the Dongcheng or Chaoyang districts for convenient access to transportation hubs.</p>
+                
+                <div class="highlight-box">
+                    <h4>Essential Packing List:</h4>
+                    <ul>
+                        <li>Sturdy hiking boots with good ankle support</li>
+                        <li>Weather-appropriate clothing (layers are recommended)</li>
+                        <li>Sun protection (hat, sunglasses, sunscreen)</li>
+                        <li>Insect repellent (especially in summer)</li>
+                        <li>Sufficient water and snacks for each hike</li>
+                        <li>Basic first aid kit</li>
+                        <li>Camera with extra batteries</li>
+                        <li>Power bank for your mobile devices</li>
+                    </ul>
+                </div>
+                
+                <h3 id="day2">Day 2: Mutianyu Section</h3>
+                <p>Start your Great Wall experience with the relatively accessible but less crowded Mutianyu section, about 70km northeast of Beijing. This well-preserved section features 23 watchtowers and stunning views of the surrounding forest.</p>
+                
+                <p><strong>How to get there:</strong> Take a direct tourist bus from Dongzhimen Transport Hub or hire a private car/taxi (approximately 700-800 RMB for a round trip).</p>
+                
+                <p><strong>Highlights:</strong></p>
+                <ul>
+                    <li>Take the cable car up and toboggan down for a unique experience</li>
+                    <li>Hike between watchtowers 14-23 for the best views and fewer crowds</li>
+                    <li>Visit early morning (before 9 AM) or late afternoon (after 3 PM) to avoid tour groups</li>
+                </ul>
+                
+                <img src="https://images.unsplash.com/photo-1508804047805-b121935003c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80" alt="Mutianyu section of the Great Wall">
+                
+                <h3 id="day3">Day 3: Jinshanling Section</h3>
+                <p>The Jinshanling section offers a perfect balance between accessibility and authenticity. Located about 130km northeast of Beijing, this section is known for its photogenic views and variety of architectural styles.</p>
+                
+                <p><strong>How to get there:</strong> Take the direct tourist bus from Wangjing West Station or hire a private driver (approximately 1000-1200 RMB for a round trip).</p>
+                
+                <p><strong>Highlights:</strong></p>
+                <ul>
+                    <li>Explore the 67 watchtowers spread across 10.5km</li>
+                    <li>Witness the transition between restored and wild wall sections</li>
+                    <li>Capture stunning sunrise or sunset photos from the east or west sides</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    <h4>Photography Tip:</h4>
+                    <p>Jinshanling is considered one of the most photogenic sections of the Great Wall. For the best light and dramatic shadows, visit during the golden hours (shortly after sunrise or before sunset).</p>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="sidebar-box">
+                    <h3>Table of Contents</h3>
+                    <ul class="toc-list">
+                        <li><a href="#understanding">Understanding the Great Wall</a></li>
+                        <li><a href="#itinerary">7-Day Itinerary</a></li>
+                        <li><a href="#day1">Day 1: Arrival & Preparation</a></li>
+                        <li><a href="#day2">Day 2: Mutianyu Section</a></li>
+                        <li><a href="#day3">Day 3: Jinshanling Section</a></li>
+                        <li><a href="#day4">Day 4: Simatai & Gubeikou</a></li>
+                        <li><a href="#day5">Day 5: Huanghuacheng</a></li>
+                        <li><a href="#day6">Day 6: Jiankou Section</a></li>
+                        <li><a href="#day7">Day 7: Return to Beijing</a></li>
+                        <li><a href="#tips">Essential Tips</a></li>
+                    </ul>
+                </div>
+                
+                <div class="sidebar-box">
+                    <h3>About the Author</h3>
+                    <div class="author-box">
+                        <div class="author-img">
+                            <img src="https://images.unsplash.com/photo-1557862921-37829c790f19?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Author">
+                        </div>
+                        <div class="author-info">
+                            <h4>Michael Zhang</h4>
+                            <p>Travel writer and photographer specializing in Chinese cultural heritage sites</p>
+                        </div>
+                    </div>
+                    <p>Michael has hiked over 30 different sections of the Great Wall and written extensively about China's historical monuments.</p>
+                </div>
+                
+                <div class="sidebar-box gallery-box">
+                    <h3>Photo Gallery</h3>
+                    <img src="https://images.unsplash.com/photo-1508804047805-b121935003c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Great Wall Photo 1">
+                    <img src="https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Great Wall Photo 2">
+                    <img src="https://images.unsplash.com/photo-1547637589-f54c34f5d7a4?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Great Wall Photo 3">
+                    <img src="https://images.unsplash.com/photo-1567293546476-7a3c36b1d2fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Great Wall Photo 4">
+                    <a href="#" class="btn" style="width: 100%; text-align: center; margin-top: 10px;">View All Photos</a>
+                </div>
+                
+                <div class="sidebar-box">
+                    <h3>Weather Information</h3>
+                    <p><strong>Best visiting seasons:</strong> Spring (April-May) and Autumn (September-October) offer pleasant temperatures and clear skies, ideal for hiking and photography.</p>
+                    <p><strong>Summer (June-August):</strong> Hot and humid with occasional rainfall. Carry sufficient water and sun protection.</p>
+                    <p><strong>Winter (November-March):</strong> Cold with potential snow. Beautiful scenery but requires proper winter gear and caution on slippery sections.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 相关攻略 -->
+    <section class="related-guides">
+        <div class="container">
+            <h2>You May Also Like</h2>
+            <div class="related-grid">
+                <div class="related-card">
+                    <div class="related-img">
+                        <img src="https://images.unsplash.com/photo-1599577180513-7dd4a0fcc770?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Beijing Guide">
+                    </div>
+                    <div class="related-content">
+                        <h3>Beijing for First-Timers</h3>
+                        <p>A comprehensive 5-day itinerary covering all the must-see attractions in China's historic capital.</p>
+                        <a href="beijing-itinerary.html" class="btn">Read Guide</a>
+                    </div>
+                </div>
+                <div class="related-card">
+                    <div class="related-img">
+                        <img src="https://images.unsplash.com/photo-1517309230475-6736d926b979?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Zhangjiajie">
+                    </div>
+                    <div class="related-content">
+                        <h3>Zhangjiajie's Avatar Mountains</h3>
+                        <p>Navigate through the surreal pillar-like formations that inspired the floating mountains in Avatar.</p>
+                        <a href="zhangjiajie-guide.html" class="btn">Read Guide</a>
+                    </div>
+                </div>
+                <div class="related-card">
+                    <div class="related-img">
+                        <img src="https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Beijing Hutongs">
+                    </div>
+                    <div class="related-content">
+                        <h3>Beijing's Historic Hutongs</h3>
+                        <p>Explore the traditional alleyways and courtyard homes that reveal Beijing's authentic local life.</p>
+                        <a href="beijing-hutongs.html" class="btn">Read Guide</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Discover China</h3>
+                    <p>Your insider guide to authentic Chinese travel experiences, stunning photography, and cultural insights.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Destinations</h3>
+                    <ul class="footer-links">
+                        <li><a href="beijing.html">Beijing</a></li>
+                        <li><a href="shanghai.html">Shanghai</a></li>
+                        <li><a href="xian.html">Xi'an</a></li>
+                        <li><a href="guilin.html">Guilin</a></li>
+                        <li><a href="chengdu.html">Chengdu</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Travel Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Photography Tips</a></li>
+                        <li><a href="#">Visa Information</a></li>
+                        <li><a href="#">Transportation Guide</a></li>
+                        <li><a href="#">Accommodation</a></li>
+                        <li><a href="#">Packing Lists</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Connect</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Use</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 Discover China. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 

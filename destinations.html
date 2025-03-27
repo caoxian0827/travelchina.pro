@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destinations | Discover China</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            color: #333;
+            line-height: 1.6;
+            background-color: #fff;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* 导航栏 */
+        header {
+            position: fixed;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #e74c3c;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #e74c3c;
+        }
+        
+        .nav-links a.active {
+            color: #e74c3c;
+            border-bottom: 2px solid #e74c3c;
+        }
+        
+        /* 页面标题 */
+        .page-header {
+            height: 60vh;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1518091043644-c1d4457512c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            margin-bottom: 60px;
+        }
+        
+        .page-header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .page-header p {
+            font-size: 18px;
+            max-width: 700px;
+            margin-bottom: 30px;
+        }
+        
+        /* 目的地过滤器 */
+        .filter-container {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .filter-buttons {
+            display: inline-flex;
+            background-color: #f5f5f5;
+            border-radius: 30px;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-button {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #555;
+            transition: all 0.3s;
+        }
+        
+        .filter-button.active {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        /* 目的地网格 */
+        .destinations-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .destination-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            position: relative;
+        }
+        
+        .destination-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .destination-img {
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .destination-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 30px 20px 20px;
+            color: white;
+        }
+        
+        .destination-overlay h3 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .destination-overlay p {
+            margin-bottom: 15px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .destination-tag {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: rgba(231, 76, 60, 0.8);
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #c0392b;
+        }
+        
+        /* 推荐行程 */
+        .recommended {
+            padding: 60px 0;
+            background-color: #f9f9f9;
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 32px;
+            font-weight: 600;
+        }
+        
+        .itinerary-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        
+        .itinerary-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .itinerary-header {
+            padding: 20px;
+            background-color: #333;
+            color: white;
+        }
+        
+        .itinerary-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+        
+        .itinerary-header p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .itinerary-content {
+            padding: 20px;
+        }
+        
+        .itinerary-day {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .itinerary-day:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .day-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #e74c3c;
+        }
+        
+        /* 页脚 */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #e74c3c;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #e74c3c;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 900px) {
+            .destinations-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .itinerary-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header h1 {
+                font-size: 36px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .destinations-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header h1 {
+                font-size: 28px;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .filter-buttons {
+                display: flex;
+                flex-direction: column;
+                background: none;
+                padding: 0;
+            }
+            
+            .filter-button {
+                margin-bottom: 10px;
+                background-color: #f5f5f5;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Discover China</div>
+                <ul class="nav-links">
+                    <li><a href="destinations.html" class="active">Destinations</a></li>
+                    <li><a href="guides.html">Guides</a></li>
+                    <li><a href="photography.html">Photography</a></li>
+                    <li><a href="culture.html">Culture</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 页面标题 -->
+    <section class="page-header">
+        <h1>Explore Destinations</h1>
+        <p>Discover the diverse landscapes, ancient cities, and hidden gems across China</p>
+    </section>
+
+    <div class="container">
+        <!-- 目的地过滤器 -->
+        <div class="filter-container">
+            <div class="filter-buttons">
+                <button class="filter-button active">All Destinations</button>
+                <button class="filter-button">Cities</button>
+                <button class="filter-button">Nature</button>
+                <button class="filter-button">Historical</button>
+                <button class="filter-button">Off-Beat</button>
+            </div>
+        </div>
+        
+        <!-- 目的地网格 -->
+        <div class="destinations-grid">
+            <div class="destination-card">
+                <div class="destination-img" style="background-image: url('https://images.unsplash.com/photo-1508804185872-d7badad00f7d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');"></div>
+                <div class="destination-overlay">
+                    <h3>Beijing</h3>
+                    <p>China's historic capital blending imperial history with modern innovation</p>
+                    <div class="destination-tags">
+                        <span class="destination-tag">Cities</span>
+                        <span class="destination-tag">Historical</span>
+                    </div>
+                    <a href="beijing.html" class="btn">Explore</a>
+                </div>
+            </div>
+            <div class="destination-card">
+                <div class="destination-img" style="background-image: url('https://images.unsplash.com/photo-1465447142348-e9952c393450?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');"></div>
+                <div class="destination-overlay">
+                    <h3>Shanghai</h3>
+                    <p>The ultramodern financial center with colonial influences</p>
+                    <div class="destination-tags">
+                        <span class="destination-tag">Cities</span>
+                        <span class="destination-tag">Modern</span>
+                    </div>
+                    <a href="shanghai.html" class="btn">Explore</a>
+                </div>
+            </div>
+            <div class="destination-card">
+                <div class="destination-img" style="background-image: url('https://images.unsplash.com/photo-1559618750-3b93b2d63b65?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');"></div>
+                <div class="destination-overlay">
+                    <h3>Xi'an</h3>
+                    <p>Ancient city home to the legendary Terracotta Warriors</p>
+                    <div class="destination-tags">
+                        <span class="destination-tag">Cities</span>
+                        <span class="destination-tag">Historical</span>
+                    </div>
+                    <a href="xian.html" class="btn">Explore</a>
+                </div>
+            </div>
+            <div class="destination-card">
+                <div class="destination-img" style="background-image: url('https://images.unsplash.com/photo-1513977055326-8ae6272d90a7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');"></div>
+                <div class="destination-overlay">
+                    <h3>Guilin</h3>
+                    <p>Dramatic landscape of limestone karst hills and winding rivers</p>
+                    <div class="destination-tags">
+                        <span class="destination-tag">Nature</span>
+                        <span class="destination-tag">Scenery</span>
+                    </div>
+                    <a href="guilin.html" class="btn">Explore</a>
+                </div>
+            </div>
+            <div class="destination-card">
+                <div class="destination-img" style="background-image: url('https://images.unsplash.com/photo-1545293527-e26058c5b48b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');"></div>
+                <div class="destination-overlay">
+                    <h3>Chengdu</h3>
+                    <p>Home to giant pandas and renowned for its spicy cuisine</p>
+                    <div class="destination-tags">
+                        <span class="destination-tag">Cities</span>
+                        <span class="destination-tag">Food</span>
+                    </div>
+                    <a href="chengdu.html" class="btn">Explore</a>
+                </div>
+            </div>
+            <div class="destination-card">
+                <div class="destination-img" style="background-image: url('https://images.unsplash.com/photo-1517309230475-6736d926b979?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');"></div>
+                <div class="destination-overlay">
+                    <h3>Zhangjiajie</h3>
+                    <p>Towering quartzite sandstone pillars that inspired Avatar's floating mountains</p>
+                    <div class="destination-tags">
+                        <span class="destination-tag">Nature</span>
+                        <span class="destination-tag">Adventure</span>
+                    </div>
+                    <a href="zhangjiajie.html" class="btn">Explore</a>
+                </div>
+            </div>
+            <div class="destination-card">
+                <div class="destination-img" style="background-image: url('https://images.unsplash.com/photo-1558981408-db0ecd8a1ee4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');"></div>
+                <div class="destination-overlay">
+                    <h3>Lhasa</h3>
+                    <p>Tibet's spiritual heart nestled high in the Himalayas</p>
+                    <div class="destination-tags">
+                        <span class="destination-tag">Historical</span>
+                        <span class="destination-tag">Cultural</span>
+                    </div>
+                    <a href="lhasa.html" class="btn">Explore</a>
+                </div>
+            </div>
+            <div class="destination-card">
+                <div class="destination-img" style="background-image: url('https://images.unsplash.com/photo-1578950435899-d1c1bf932637?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');"></div>
+                <div class="destination-overlay">
+                    <h3>Hangzhou</h3>
+                    <p>Marco Polo's "Paradise on Earth" with its stunning West Lake</p>
+                    <div class="destination-tags">
+                        <span class="destination-tag">Cities</span>
+                        <span class="destination-tag">Nature</span>
+                    </div>
+                    <a href="hangzhou.html" class="btn">Explore</a>
+                </div>
+            </div>
+            <div class="destination-card">
+                <div class="destination-img" style="background-image: url('https://images.unsplash.com/photo-1555244162-803834f70033?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');"></div>
+                <div class="destination-overlay">
+                    <h3>Suzhou</h3>
+                    <p>Classical gardens and canals in this "Venice of the East"</p>
+                    <div class="destination-tags">
+                        <span class="destination-tag">Historical</span>
+                        <span class="destination-tag">Cultural</span>
+                    </div>
+                    <a href="suzhou.html" class="btn">Explore</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 推荐行程 -->
+    <section class="recommended">
+        <div class="container">
+            <h2 class="section-title">Recommended Itineraries</h2>
+            <div class="itinerary-container">
+                <div class="itinerary-card">
+                    <div class="itinerary-header">
+                        <h3>Classic China Journey</h3>
+                        <p>14 Days | Beijing - Xi'an - Chengdu - Shanghai</p>
+                    </div>
+                    <div class="itinerary-content">
+                        <div class="itinerary-day">
+                            <div class="day-title">Days 1-4: Beijing</div>
+                            <p>Explore the Forbidden City, Great Wall, Temple of Heaven, and experience local hutong life.</p>
+                        </div>
+                        <div class="itinerary-day">
+                            <div class="day-title">Days 5-7: Xi'an</div>
+                            <p>Visit the Terracotta Warriors, Ancient City Wall, and indulge in delicious street food.</p>
+                        </div>
+                        <div class="itinerary-day">
+                            <div class="day-title">Days 8-10: Chengdu</div>
+                            <p>Meet the giant pandas, taste authentic Sichuan cuisine, and visit Leshan Giant Buddha.</p>
+                        </div>
+                        <div class="itinerary-day">
+                            <div class="day-title">Days 11-14: Shanghai</div>
+                            <p>Experience the Bund, modern Pudong, and take day trips to nearby water towns.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="itinerary-card">
+                    <div class="itinerary-header">
+                        <h3>Natural Wonders Tour</h3>
+                        <p>10 Days | Zhangjiajie - Guilin - Yunnan</p>
+                    </div>
+                    <div class="itinerary-content">
+                        <div class="itinerary-day">
+                            <div class="day-title">Days 1-3: Zhangjiajie</div>
+                            <p>Hike through the surreal stone pillars of Zhangjiajie National Forest Park and walk on the glass bridge.</p>
+                        </div>
+                        <div class="itinerary-day">
+                            <div class="day-title">Days 4-6: Guilin & Yangshuo</div>
+                            <p>Cruise down the Li River, cycle through karst landscapes, and explore the beautiful caves.</p>
+                        </div>
+                        <div class="itinerary-day">
+                            <div class="day-title">Days 7-10: Yunnan</div>
+                            <p>Discover the stunning landscapes of Lijiang, the Tiger Leaping Gorge, and the vibrant culture of Dali.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Discover China</h3>
+                    <p>Your insider guide to authentic Chinese travel experiences, stunning photography, and cultural insights.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Destinations</h3>
+                    <ul class="footer-links">
+                        <li><a href="beijing.html">Beijing</a></li>
+                        <li><a href="shanghai.html">Shanghai</a></li>
+                        <li><a href="xian.html">Xi'an</a></li>
+                        <li><a href="guilin.html">Guilin</a></li>
+                        <li><a href="chengdu.html">Chengdu</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Travel Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Photography Tips</a></li>
+                        <li><a href="#">Visa Information</a></li>
+                        <li><a href="#">Transportation Guide</a></li>
+                        <li><a href="#">Accommodation</a></li>
+                        <li><a href="#">Packing Lists</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Connect</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Use</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 Discover China. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 

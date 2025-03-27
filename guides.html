@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Guides | Discover China</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            color: #333;
+            line-height: 1.6;
+            background-color: #fff;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* 导航栏 */
+        header {
+            position: fixed;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #e74c3c;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #e74c3c;
+        }
+        
+        .nav-links a.active {
+            color: #e74c3c;
+            border-bottom: 2px solid #e74c3c;
+        }
+        
+        /* 页面标题 */
+        .page-header {
+            height: 60vh;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1567293546476-7a3c36b1d2fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            margin-bottom: 60px;
+        }
+        
+        .page-header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .page-header p {
+            font-size: 18px;
+            max-width: 700px;
+            margin-bottom: 30px;
+        }
+        
+        /* 分类过滤器 */
+        .filter-container {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .filter-buttons {
+            display: inline-flex;
+            background-color: #f5f5f5;
+            border-radius: 30px;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-button {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #555;
+            transition: all 0.3s;
+        }
+        
+        .filter-button.active {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        /* 搜索区域 */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+        
+        .search-form {
+            display: flex;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .search-form input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            font-size: 16px;
+        }
+        
+        .search-form button {
+            padding: 15px 30px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        /* 特色攻略 */
+        .featured-guides {
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 32px;
+            font-weight: 600;
+        }
+        
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        
+        .featured-guide {
+            display: flex;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .featured-guide:hover {
+            transform: translateY(-10px);
+        }
+        
+        .guide-img {
+            flex: 0 0 40%;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .guide-content {
+            flex: 0 0 60%;
+            padding: 25px;
+        }
+        
+        .guide-content h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        
+        .guide-content .meta {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .meta-dot {
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            background-color: #e74c3c;
+            border-radius: 50%;
+            margin: 0 8px;
+        }
+        
+        .guide-content p {
+            margin-bottom: 15px;
+            color: #666;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #c0392b;
+        }
+        
+        /* 所有攻略 */
+        .all-guides {
+            margin-bottom: 60px;
+        }
+        
+        .guides-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .guide-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .guide-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .guide-card-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .guide-card-content {
+            padding: 20px;
+        }
+        
+        .guide-card-content h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .guide-card-content .meta {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .guide-card-content p {
+            margin-bottom: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .guide-tags {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .guide-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background-color: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .pagination-item {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            border-radius: 4px;
+            background-color: #f5f5f5;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .pagination-item:hover {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .pagination-item.active {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        /* 订阅区域 */
+        .subscribe {
+            background-color: #f9f9f9;
+            padding: 60px 0;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .subscribe h2 {
+            margin-bottom: 20px;
+        }
+        
+        .subscribe p {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            color: #666;
+        }
+        
+        .subscribe-form {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .subscribe-form input {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 16px;
+        }
+        
+        .subscribe-form button {
+            padding: 15px 30px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        /* 页脚 */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #e74c3c;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #e74c3c;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 900px) {
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .guides-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .page-header h1 {
+                font-size: 36px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .guides-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header h1 {
+                font-size: 28px;
+            }
+            
+            .featured-guide {
+                flex-direction: column;
+            }
+            
+            .guide-img {
+                height: 200px;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .filter-buttons {
+                display: flex;
+                flex-direction: column;
+                background: none;
+                padding: 0;
+            }
+            
+            .filter-button {
+                margin-bottom: 10px;
+                background-color: #f5f5f5;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Discover China</div>
+                <ul class="nav-links">
+                    <li><a href="destinations.html">Destinations</a></li>
+                    <li><a href="guides.html" class="active">Guides</a></li>
+                    <li><a href="photography.html">Photography</a></li>
+                    <li><a href="culture.html">Culture</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 页面标题 -->
+    <section class="page-header">
+        <h1>Travel Guides</h1>
+        <p>In-depth guides to help you discover the best of China - from iconic attractions to hidden gems</p>
+    </section>
+
+    <div class="container">
+        <!-- 分类过滤器 -->
+        <div class="filter-container">
+            <div class="filter-buttons">
+                <button class="filter-button active">All Guides</button>
+                <button class="filter-button">Itineraries</button>
+                <button class="filter-button">Food & Dining</button>
+                <button class="filter-button">Adventure</button>
+                <button class="filter-button">Cultural</button>
+            </div>
+        </div>
+        
+        <!-- 搜索区域 -->
+        <div class="search-container">
+            <form class="search-form">
+                <input type="text" placeholder="Search guides by keyword or location...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        
+        <!-- 特色攻略 -->
+        <section class="featured-guides">
+            <h2 class="section-title">Featured Travel Guides</h2>
+            <div class="featured-grid">
+                <div class="featured-guide">
+                    <div class="guide-img" style="background-image: url('https://images.unsplash.com/photo-1567293546476-7a3c36b1d2fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');"></div>
+                    <div class="guide-content">
+                        <div class="meta">
+                            <span>7 Days Itinerary</span>
+                            <span class="meta-dot"></span>
+                            <span>Updated: May 2023</span>
+                        </div>
+                        <h3>The Ultimate Great Wall Experience</h3>
+                        <p>Explore the less-visited sections of the Great Wall, away from the tourist crowds. This guide takes you through stunning landscapes and historic watchtowers that most travelers never see.</p>
+                        <a href="great-wall-guide.html" class="btn">Read Guide</a>
+                    </div>
+                </div>
+                <div class="featured-guide">
+                    <div class="guide-img" style="background-image: url('https://images.unsplash.com/photo-1527909740943-0069c4f94e16?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');"></div>
+                    <div class="guide-content">
+                        <div class="meta">
+                            <span>Food & Culture</span>
+                            <span class="meta-dot"></span>
+                            <span>Updated: June 2023</span>
+                        </div>
+                        <h3>A Culinary Journey Through Sichuan</h3>
+                        <p>Discover the bold flavors and secret food spots of Sichuan province. From street food to high-end dining, this guide will introduce you to the authentic tastes of one of China's most celebrated cuisines.</p>
+                        <a href="sichuan-food-guide.html" class="btn">Read Guide</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 所有攻略 -->
+        <section class="all-guides">
+            <h2 class="section-title">All Travel Guides</h2>
+            <div class="guides-grid">
+                <div class="guide-card">
+                    <div class="guide-card-img" style="background-image: url('https://images.unsplash.com/photo-1599577180513-7dd4a0fcc770?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="guide-card-content">
+                        <div class="meta">
+                            <span>Itinerary</span>
+                            <span class="meta-dot"></span>
+                            <span>5 Days</span>
+                        </div>
+                        <h3>Beijing for First-Timers</h3>
+                        <div class="guide-tags">
+                            <span class="guide-tag">Historical</span>
+                            <span class="guide-tag">Cultural</span>
+                            <span class="guide-tag">City</span>
+                        </div>
+                        <p>A comprehensive 5-day itinerary covering all the must-see attractions in China's historic capital.</p>
+                        <a href="beijing-itinerary.html" class="btn">Read Guide</a>
+                    </div>
+                </div>
+                <div class="guide-card">
+                    <div class="guide-card-img" style="background-image: url('https://images.unsplash.com/photo-1588156978324-7c75882e7def?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="guide-card-content">
+                        <div class="meta">
+                            <span>Adventure</span>
+                            <span class="meta-dot"></span>
+                            <span>3 Days</span>
+                        </div>
+                        <h3>Hiking Tiger Leaping Gorge</h3>
+                        <div class="guide-tags">
+                            <span class="guide-tag">Trekking</span>
+                            <span class="guide-tag">Nature</span>
+                            <span class="guide-tag">Advanced</span>
+                        </div>
+                        <p>A detailed guide to one of China's most spectacular hiking trails through dramatic gorges.</p>
+                        <a href="tiger-leaping-gorge.html" class="btn">Read Guide</a>
+                    </div>
+                </div>
+                <div class="guide-card">
+                    <div class="guide-card-img" style="background-image: url('https://images.unsplash.com/photo-1505993597083-3bd19fb75ef6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="guide-card-content">
+                        <div class="meta">
+                            <span>Food & Dining</span>
+                            <span class="meta-dot"></span>
+                            <span>Shanghai</span>
+                        </div>
+                        <h3>Shanghai's Hidden Food Streets</h3>
+                        <div class="guide-tags">
+                            <span class="guide-tag">Street Food</span>
+                            <span class="guide-tag">Local Cuisine</span>
+                            <span class="guide-tag">Budget</span>
+                        </div>
+                        <p>Discover the authentic flavors of Shanghai beyond the tourist areas in these local food streets.</p>
+                        <a href="shanghai-food.html" class="btn">Read Guide</a>
+                    </div>
+                </div>
+                <div class="guide-card">
+                    <div class="guide-card-img" style="background-image: url('https://images.unsplash.com/photo-1513977055326-8ae6272d90a7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="guide-card-content">
+                        <div class="meta">
+                            <span>Itinerary</span>
+                            <span class="meta-dot"></span>
+                            <span>4 Days</span>
+                        </div>
+                        <h3>Guilin & Yangshuo Scenic Journey</h3>
+                        <div class="guide-tags">
+                            <span class="guide-tag">Landscape</span>
+                            <span class="guide-tag">Photography</span>
+                            <span class="guide-tag">River Cruise</span>
+                        </div>
+                        <p>Experience the breathtaking karst landscapes and rural villages of Guilin and Yangshuo.</p>
+                        <a href="guilin-yangshuo.html" class="btn">Read Guide</a>
+                    </div>
+                </div>
+                <div class="guide-card">
+                    <div class="guide-card-img" style="background-image: url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="guide-card-content">
+                        <div class="meta">
+                            <span>Cultural</span>
+                            <span class="meta-dot"></span>
+                            <span>Xi'an</span>
+                        </div>
+                        <h3>Beyond the Terracotta Warriors</h3>
+                        <div class="guide-tags">
+                            <span class="guide-tag">Historical</span>
+                            <span class="guide-tag">Museums</span>
+                            <span class="guide-tag">Architecture</span>
+                        </div>
+                        <p>Explore Xi'an's rich cultural heritage beyond its famous warriors, from ancient city walls to Muslim Quarter.</p>
+                        <a href="xian-culture.html" class="btn">Read Guide</a>
+                    </div>
+                </div>
+                <div class="guide-card">
+                    <div class="guide-card-img" style="background-image: url('https://images.unsplash.com/photo-1544623781-5dd950de6f75?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="guide-card-content">
+                        <div class="meta">
+                            <span>Adventure</span>
+                            <span class="meta-dot"></span>
+                            <span>3 Days</span>
+                        </div>
+                        <h3>Zhangjiajie's Avatar Mountains</h3>
+                        <div class="guide-tags">
+                            <span class="guide-tag">Nature</span>
+                            <span class="guide-tag">Hiking</span>
+                            <span class="guide-tag">Photography</span>
+                        </div>
+                        <p>Navigate through the surreal pillar-like formations that inspired the floating mountains in Avatar.</p>
+                        <a href="zhangjiajie-guide.html" class="btn">Read Guide</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 分页 -->
+            <div class="pagination">
+                <a href="#" class="pagination-item active">1</a>
+                <a href="#" class="pagination-item">2</a>
+                <a href="#" class="pagination-item">3</a>
+                <a href="#" class="pagination-item">4</a>
+                <a href="#" class="pagination-item">5</a>
+                <a href="#" class="pagination-item">→</a>
+            </div>
+        </section>
+    </div>
+    
+    <!-- 订阅区域 -->
+    <section class="subscribe">
+        <div class="container">
+            <h2>Get Travel Inspiration</h2>
+            <p>Subscribe to our newsletter for exclusive travel guides, photography tips, and insider information about China's most beautiful destinations.</p>
+            <form class="subscribe-form">
+                <input type="email" placeholder="Your email address">
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Discover China</h3>
+                    <p>Your insider guide to authentic Chinese travel experiences, stunning photography, and cultural insights.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Destinations</h3>
+                    <ul class="footer-links">
+                        <li><a href="beijing.html">Beijing</a></li>
+                        <li><a href="shanghai.html">Shanghai</a></li>
+                        <li><a href="xian.html">Xi'an</a></li>
+                        <li><a href="guilin.html">Guilin</a></li>
+                        <li><a href="chengdu.html">Chengdu</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Travel Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Photography Tips</a></li>
+                        <li><a href="#">Visa Information</a></li>
+                        <li><a href="#">Transportation Guide</a></li>
+                        <li><a href="#">Accommodation</a></li>
+                        <li><a href="#">Packing Lists</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Connect</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Use</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 Discover China. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 
